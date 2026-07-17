@@ -1,1 +1,1 @@
-#generate the db for the data
+#generating the db
