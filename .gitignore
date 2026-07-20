@@ -3,6 +3,7 @@
 
 # secrets
 config.json
+data.db
 
 # python cache
 _pycache_/
