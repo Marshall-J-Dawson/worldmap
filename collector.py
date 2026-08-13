@@ -40,7 +40,7 @@ def start_mqtt(on_connect, on_message):
     
    
 
-    client.loop_forever()
+    client.loop_start()
 
 
 

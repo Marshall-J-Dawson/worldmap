@@ -1,21 +1,19 @@
-#generating the db
 import sqlite3
 from datetime import datetime
 from zoneinfo import ZoneInfo
 import json
+import os
 
 with open("config.json") as h:
     config = json.load(h)
 
 
-connection = None
-cursor = None
+DATABASE = "data.db"
+
 
 def initialise_database():
-    global connection, cursor
 
-    connection = sqlite3.connect('data.db')
-
+    connection = sqlite3.connect(DATABASE)
     cursor = connection.cursor()
 
     cursor.execute("""
@@ -29,31 +27,45 @@ def initialise_database():
     """)
 
     connection.commit()
+    connection.close()
+
     print("\nDATABASE INITIALISED\n")
 
 
-
 def insert_location(latitude, longitude, timestamp, battery):
+
+    connection = sqlite3.connect(DATABASE)
+    cursor = connection.cursor()
+
     cursor.execute("""
         INSERT INTO locations
         (latitude, longitude, timestamp, battery)
-        VALUES(?, ?, ?, ?)
-    """,(latitude, longitude, timestamp, battery))
+        VALUES (?, ?, ?, ?)
+    """, (latitude, longitude, timestamp, battery))
+
     connection.commit()
+    connection.close()
+
 
 def get_locations():
+
+    connection = sqlite3.connect(DATABASE)
+    cursor = connection.cursor()
 
     cursor.execute("""
         SELECT latitude, longitude, timestamp, battery
         FROM locations
     """)
 
-    return cursor.fetchall()
+    locations = cursor.fetchall()
 
-def close_database():
     connection.close()
 
+    return locations
+
+
 def convert_time(tst):
+
     local_time = datetime.fromtimestamp(
         tst,
         tz=ZoneInfo(config["location"])
@@ -61,4 +73,9 @@ def convert_time(tst):
 
     return local_time.strftime("%Y-%m-%d %H:%M:%S")
 
-
+def clear_database():
+    if os.path.exists(DATABASE):
+        os.remove(DATABASE)
+        print("Database file deleted successfully.")
+    else:
+        print("Database file does not exist.")

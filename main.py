@@ -1,7 +1,7 @@
 import json
 import database
 import collector
-
+import gui
 
 
 database.initialise_database()
@@ -23,6 +23,8 @@ def on_message(client, userdata, message):
 
 
 collector.start_mqtt(collector.on_connect, on_message)
+
+gui.run_gui()
 
 
 
