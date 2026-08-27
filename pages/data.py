@@ -8,14 +8,14 @@ from PySide6.QtWidgets import (
 
 
 
-class TablePage(QWidget):
+class DataPage(QWidget):
 
     def __init__(self, main_window):
         super().__init__()
         layout = QVBoxLayout()
 
         delete_data = QPushButton("Delete Data")
-        delete_data.clicked.connect(main_window.delete_database)
+        delete_data.clicked.connect(main_window.open_prompt)
         
 
         back_button = QPushButton("← Back")

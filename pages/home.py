@@ -19,7 +19,7 @@ class HomePage(QWidget):
 
         #action triggers
         map_button.clicked.connect(main_window.open_map)
-        table_button.clicked.connect(main_window.open_table)
+        table_button.clicked.connect(main_window.open_data)
         stats_button.clicked.connect(main_window.open_stats)
 
 
