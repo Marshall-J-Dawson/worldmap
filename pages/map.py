@@ -33,7 +33,7 @@ class MapPage(QWidget):
 
         self.timer = QTimer(self)
         self.timer.timeout.connect(self.update_map)
-        self.timer.start(10000)
+        self.timer.start(1000)
 
         # loads map and updates if there are changes
     def update_map(self):
@@ -116,6 +116,14 @@ class MapPage(QWidget):
                         attribution: '&copy; OpenStreetMap contributors'
                     }}
                 ).addTo(map);
+
+                //L.tileLayer(
+                //    'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{{z}}/{{y}}/{{x}}',
+                //    {{
+                //        maxZoom: 19,
+                //        attribution: 'Tiles © Esri'
+                //    }}
+                // ).addTo(map);               
 
 
                 // Convert locations into coordinates
