@@ -9,7 +9,6 @@ from PySide6.QtWidgets import (
 
 from PySide6.QtCore import QTimer
 
-
 from pages.home import HomePage
 from pages.map import MapPage
 from pages.data import DataPage

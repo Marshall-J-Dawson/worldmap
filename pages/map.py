@@ -6,6 +6,7 @@ from PySide6.QtWidgets import (
 from PySide6.QtWebEngineWidgets import QWebEngineView
 import json
 from database import get_locations
+from PySide6.QtCore import QTimer
 
 
 class MapPage(QWidget):
@@ -27,21 +28,35 @@ class MapPage(QWidget):
         self.setLayout(layout)
 
 
-        # changing tuple format for leaflet compatibility
-        locations = []
-        for latitude, longitude, timestamp, battery in get_locations():
+        # Check database for new locations every 500 ms
+        self.last_location_count = 0
 
-            locations.append({
-                "latitude": latitude,
-                "longitude": longitude,
-                "timestamp": timestamp
-                # "battery": battery 
-                # currently battery isnt used
+        self.timer = QTimer(self)
+        self.timer.timeout.connect(self.update_map)
+        self.timer.start(10000)
 
-            })
+        # loads map and updates if there are changes
+    def update_map(self):
+
+        database_locations = get_locations()
+        if len(database_locations) > self.last_location_count:
+
+            self.last_location_count = len(database_locations)
+
+            locations = []
+            #potentially might be too laggy in future rewriting and loading the whole database
+            for latitude, longitude, timestamp, battery in database_locations:
+
+                locations.append({
+                    "latitude": latitude,
+                    "longitude": longitude,
+                    "timestamp": timestamp,
+                    "battery": battery
+                })
+
+            self.load_map(locations)
 
 
-        self.load_map(locations)
 
     def load_map(self, locations):
 
