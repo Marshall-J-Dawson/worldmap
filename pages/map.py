@@ -5,6 +5,7 @@ from PySide6.QtWidgets import (
 )
 from PySide6.QtWebEngineWidgets import QWebEngineView
 import json
+from database import get_locations
 
 
 class MapPage(QWidget):
@@ -25,32 +26,22 @@ class MapPage(QWidget):
 
         self.setLayout(layout)
 
-        # Temporary test locations
-        locations = [
-            {
-                "latitude": 36.2048,
-                "longitude": 138.2529,
-                "timestamp": "2026-08-27 10:00"
-            },
-            {
-                "latitude": 40.7128,
-                "longitude": -74.0060,
-                "timestamp": "2026-08-27 10:15"
-            },
-            {
-                "latitude": -37.8136,
-                "longitude": 144.9631,
-                "timestamp": "2026-08-27 10:30"
-            },
-            {
-                "latitude": 51.5074,
-                "longitude": 0.1278,
-                "timestamp": "2026-08-27 10:45"
-            }
-        ]
+
+        # changing tuple format for leaflet compatibility
+        locations = []
+        for latitude, longitude, timestamp, battery in get_locations():
+
+            locations.append({
+                "latitude": latitude,
+                "longitude": longitude,
+                "timestamp": timestamp
+                # "battery": battery 
+                # currently battery isnt used
+
+            })
+
 
         self.load_map(locations)
-
 
     def load_map(self, locations):
 
